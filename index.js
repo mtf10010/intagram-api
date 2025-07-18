@@ -4,7 +4,16 @@ const fetch = require("node-fetch"); // Corrigido para require em vez de import
 const axios = require("axios");
 
 const app = express();
-app.use(cors({ origin: "*" }));
+
+// Configuração CORS
+// Permite requisições de qualquer origem (útil para desenvolvimento)
+// Para produção, é recomendado restringir o domínio permitido, ex: 'https://seu-frontend.vercel.app'
+app.use(cors({
+    origin: "*", // Permite qualquer origem, para produção substitua por domínios específicos
+    methods: ["POST", "GET", "OPTIONS"], // Permite os métodos POST, GET e OPTIONS
+    allowedHeaders: ["Content-Type"] // Permite o cabeçalho Content-Type
+}));
+
 app.use(express.json());
 
 // PROXY DE IMAGENS (ESSENCIAL PARA v0.dev)
@@ -68,8 +77,17 @@ app.post("/api/profile", async (req, res) => {
     }
 });
 
+// Lida com requisições OPTIONS (preflight requests)
+app.options("*", (req, res) => {
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.setHeader('Access-Control-Allow-Methods', 'POST, GET, OPTIONS');
+    res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+    res.status(200).end();
+});
+
 // Porta onde a API vai rodar
 const port = process.env.PORT || 3000;
 app.listen(port, () => {
     console.log(`API rodando na porta ${port}`);
 });
+
