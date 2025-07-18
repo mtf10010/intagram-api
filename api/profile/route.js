@@ -3,6 +3,7 @@ import { NextRequest, NextResponse } from 'next/server';
 // Função para lidar com requisições OPTIONS (preflight requests) para /api/profile
 export async function OPTIONS(request: NextRequest) {
   const response = new NextResponse(null, { status: 200 });
+  // É CRÍTICO que este cabeçalho esteja presente na resposta OPTIONS
   response.headers.set('Access-Control-Allow-Origin', '*'); // Permite qualquer origem
   response.headers.set('Access-Control-Allow-Methods', 'POST, GET, OPTIONS');
   response.headers.set('Access-Control-Allow-Headers', 'Content-Type');
@@ -15,7 +16,7 @@ export async function POST(request: NextRequest) {
 
   if (!username) {
     const response = NextResponse.json({ error: "Username é obrigatório" }, { status: 400 });
-    response.headers.set('Access-Control-Allow-Origin', '*');
+    response.headers.set('Access-Control-Allow-Origin', '*'); // Também é importante na resposta POST
     return response;
   }
 
@@ -58,7 +59,7 @@ export async function POST(request: NextRequest) {
     };
 
     const response = NextResponse.json(profileData, { status: 200 });
-    response.headers.set('Access-Control-Allow-Origin', '*');
+    response.headers.set('Access-Control-Allow-Origin', '*'); // E aqui também
     return response;
 
   } catch (err) {
@@ -67,3 +68,4 @@ export async function POST(request: NextRequest) {
     response.headers.set('Access-Control-Allow-Origin', '*');
     return response;
   }
+}
