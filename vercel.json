@@ -4,13 +4,20 @@
     {
       "src": "api/profile.js",
       "use": "@vercel/node"
+    },
+    {
+      "src": "index.html",
+      "use": "@vercel/static"
     }
   ],
   "routes": [
     {
       "src": "/api/profile",
       "dest": "/api/profile.js"
+    },
+    {
+      "src": "/",
+      "dest": "/index.html"
     }
   ]
 }
-
